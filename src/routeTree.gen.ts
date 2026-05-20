@@ -13,6 +13,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashRouteImport } from './routes/_dash'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashSettingsRouteImport } from './routes/_dash/settings'
 import { Route as DashIncidentsRouteImport } from './routes/_dash/incidents'
 import { Route as DashDashboardRouteImport } from './routes/_dash/dashboard'
 import { Route as DashAlertsRouteImport } from './routes/_dash/alerts'
@@ -35,6 +36,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashSettingsRoute = DashSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashRoute,
 } as any)
 const DashIncidentsRoute = DashIncidentsRouteImport.update({
   id: '/incidents',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof DashAlertsRoute
   '/dashboard': typeof DashDashboardRoute
   '/incidents': typeof DashIncidentsRoute
+  '/settings': typeof DashSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/alerts': typeof DashAlertsRoute
   '/dashboard': typeof DashDashboardRoute
   '/incidents': typeof DashIncidentsRoute
+  '/settings': typeof DashSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/_dash/alerts': typeof DashAlertsRoute
   '/_dash/dashboard': typeof DashDashboardRoute
   '/_dash/incidents': typeof DashIncidentsRoute
+  '/_dash/settings': typeof DashSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,8 +96,16 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/incidents'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/alerts' | '/dashboard' | '/incidents'
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/alerts'
+    | '/dashboard'
+    | '/incidents'
+    | '/settings'
   id:
     | '__root__'
     | '/'
@@ -98,6 +115,7 @@ export interface FileRouteTypes {
     | '/_dash/alerts'
     | '/_dash/dashboard'
     | '/_dash/incidents'
+    | '/_dash/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -137,6 +155,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_dash/settings': {
+      id: '/_dash/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof DashSettingsRouteImport
+      parentRoute: typeof DashRoute
+    }
     '/_dash/incidents': {
       id: '/_dash/incidents'
       path: '/incidents'
@@ -165,12 +190,14 @@ interface DashRouteChildren {
   DashAlertsRoute: typeof DashAlertsRoute
   DashDashboardRoute: typeof DashDashboardRoute
   DashIncidentsRoute: typeof DashIncidentsRoute
+  DashSettingsRoute: typeof DashSettingsRoute
 }
 
 const DashRouteChildren: DashRouteChildren = {
   DashAlertsRoute: DashAlertsRoute,
   DashDashboardRoute: DashDashboardRoute,
   DashIncidentsRoute: DashIncidentsRoute,
+  DashSettingsRoute: DashSettingsRoute,
 }
 
 const DashRouteWithChildren = DashRoute._addFileChildren(DashRouteChildren)
